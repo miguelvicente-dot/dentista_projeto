@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block titulo %}Página não encontrada{% endblock %}
+
+{% block conteudo %}
+<section class="painel erro">
+    <span class="desenho pequeno" aria-hidden="true">?</span>
+    <h2>Página não encontrada</h2>
+    <p>O endereço que você abriu não existe ou o registro foi excluído.</p>
+    <a class="botao principal" href="{{ url_for('inicio') }}">Voltar para o início</a>
+</section>
+{% endblock %}

@@ -44,6 +44,10 @@ class PacienteDAO:
             cursor = conn.execute("DELETE FROM pacientes WHERE id = ?", (paciente_id,))
         return cursor.rowcount > 0
 
+    def contar(self):
+        with conectar() as conn:
+            return conn.execute("SELECT COUNT(*) FROM pacientes").fetchone()[0]
+
 
 class ConsultaDAO:
     """DAO: concentra os comandos SQL relacionados às consultas."""
@@ -67,6 +71,40 @@ class ConsultaDAO:
                 ORDER BY c.data, c.horario
             """).fetchall()
         return [dict(linha) for linha in linhas]
+
+    def listar_por_paciente(self, paciente_id):
+        """Histórico de consultas de um paciente (usado na ficha)."""
+        with conectar() as conn:
+            linhas = conn.execute("""
+                SELECT * FROM consultas
+                WHERE paciente_id = ?
+                ORDER BY data DESC, horario DESC
+            """, (paciente_id,)).fetchall()
+        return [dict(linha) for linha in linhas]
+
+    def proximas(self, hoje, limite=5):
+        """Próximas consultas agendadas a partir de hoje (usado na página inicial)."""
+        with conectar() as conn:
+            linhas = conn.execute("""
+                SELECT c.*, p.nome AS paciente_nome
+                FROM consultas c
+                JOIN pacientes p ON p.id = c.paciente_id
+                WHERE c.data >= ? AND c.status = 'Agendada'
+                ORDER BY c.data, c.horario
+                LIMIT ?
+            """, (hoje, limite)).fetchall()
+        return [dict(linha) for linha in linhas]
+
+    def contar(self, status=None):
+        with conectar() as conn:
+            if status:
+                return conn.execute("SELECT COUNT(*) FROM consultas WHERE status = ?", (status,)).fetchone()[0]
+            return conn.execute("SELECT COUNT(*) FROM consultas").fetchone()[0]
+
+    def atualizar_status(self, consulta_id, status):
+        with conectar() as conn:
+            cursor = conn.execute("UPDATE consultas SET status = ? WHERE id = ?", (status, consulta_id))
+        return cursor.rowcount > 0
 
     def excluir(self, consulta_id):
         with conectar() as conn:

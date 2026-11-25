@@ -1,7 +1,8 @@
 from pathlib import Path
-from flask import Flask, render_template
+from flask import Flask
 from .database import inicializar_banco
 from .routes import registrar_rotas
+from .paginas import registrar_paginas
 
 ROOT_DIR = Path(__file__).resolve().parent.parent
 
@@ -13,11 +14,8 @@ app = Flask(
 )
 
 inicializar_banco()
-registrar_rotas(app)
-
-@app.route("/")
-def inicio():
-    return render_template("index.html")
+registrar_paginas(app)   # páginas HTML
+registrar_rotas(app)     # API em JSON
 
 if __name__ == "__main__":
     app.run(debug=True)

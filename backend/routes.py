@@ -4,6 +4,7 @@ from .models import Paciente, Consulta
 from .dao import PacienteDAO, ConsultaDAO
 
 def registrar_rotas(app):
+    """Rotas da API: recebem e devolvem JSON (usadas pelo JavaScript com Fetch)."""
     paciente_dao = PacienteDAO()
     consulta_dao = ConsultaDAO()
 
@@ -12,7 +13,7 @@ def registrar_rotas(app):
             nome=(dados.get("nome") or "").strip(),
             telefone=(dados.get("telefone") or "").strip(),
             email=(dados.get("email") or "").strip(),
-            cpf=(dados.get("cpf") or "").strip(),
+            cpf=(dados.get("cpf") or "").strip() or None,  # vazio vira NULL (o CPF é UNIQUE)
             data_nascimento=dados.get("data_nascimento") or "",
             endereco=(dados.get("endereco") or "").strip()
         )
@@ -73,6 +74,16 @@ def registrar_rotas(app):
             return jsonify({"mensagem": "Consulta agendada!"}), 201
         except (ValueError, sqlite3.IntegrityError):
             return jsonify({"erro": "Paciente inválido. Confira o cadastro."}), 400
+
+    @app.put("/api/consultas/<int:consulta_id>/status")
+    def mudar_status_consulta(consulta_id):
+        dados = request.get_json(silent=True) or {}
+        status = dados.get("status")
+        if status not in Consulta.STATUS_VALIDOS:
+            return jsonify({"erro": "Situação inválida."}), 400
+        if not consulta_dao.atualizar_status(consulta_id, status):
+            return jsonify({"erro": "Consulta não encontrada."}), 404
+        return jsonify({"mensagem": f"Consulta marcada como {status}."})
 
     @app.delete("/api/consultas/<int:consulta_id>")
     def excluir_consulta(consulta_id):

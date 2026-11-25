@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% from "icones.html" import icone %}
+{% block titulo %}Contato{% endblock %}
+
+{% block conteudo %}
+<section class="painel">
+    <div class="titulo-secao"><div><span class="tag">FALE CONOSCO</span><h2>Contato e horários</h2><p>Venha nos visitar ou entre em contato pelos canais abaixo.</p></div></div>
+
+    <div class="contato">
+        <div class="contato-lista">
+            <div class="contato-item"><span class="ic">{{ icone("local") }}</span><div><strong>Endereço</strong><p>Rua das Acácias, 250 - Centro<br>São Paulo - SP</p></div></div>
+            <div class="contato-item"><span class="ic">{{ icone("telefone") }}</span><div><strong>Telefone</strong><p>(11) 3456-7890</p></div></div>
+            <div class="contato-item"><span class="ic">{{ icone("mensagem") }}</span><div><strong>WhatsApp</strong><p>(11) 98888-7777</p></div></div>
+            <div class="contato-item"><span class="ic">{{ icone("email") }}</span><div><strong>E-mail</strong><p>contato@sorrisofacil.com</p></div></div>
+        </div>
+
+        <div class="horarios">
+            <h3>Horário de atendimento</h3>
+            <table>
+                <tbody>
+                    <tr><td>Segunda a sexta</td><td>08:00 às 18:00</td></tr>
+                    <tr><td>Sábado</td><td>08:00 às 12:00</td></tr>
+                    <tr><td>Domingo e feriados</td><td>Fechado</td></tr>
+                </tbody>
+            </table>
+            <p class="obs">Atendimento somente com horário marcado.</p>
+        </div>
+    </div>
+</section>
+{% endblock %}

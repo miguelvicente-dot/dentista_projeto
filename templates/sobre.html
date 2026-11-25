@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% from "icones.html" import icone %}
+{% block titulo %}Sobre{% endblock %}
+
+{% block conteudo %}
+<section class="boas-vindas">
+    <div>
+        <span class="tag">QUEM SOMOS</span>
+        <h1>Sobre a<br><em>Sorriso Fácil.</em></h1>
+        <p>Uma clínica odontológica de bairro, com atendimento próximo e organizado.</p>
+    </div>
+    <div class="desenho" aria-hidden="true">{{ icone("dente") }}</div>
+</section>
+
+<section class="painel texto">
+    <div class="titulo-secao"><div><span class="tag">NOSSA HISTÓRIA</span><h2>Como tudo começou</h2></div></div>
+    <p>A Sorriso Fácil nasceu com a ideia de tornar o cuidado com os dentes simples para todo mundo. Antes, as fichas dos pacientes e a agenda ficavam em papel, o que causava horários marcados duas vezes e informações perdidas.</p>
+    <p>Com este sistema, a recepção cadastra os pacientes, agenda as consultas e acompanha a situação de cada atendimento (agendada, concluída ou cancelada), tudo salvo em um banco de dados.</p>
+</section>
+
+<section class="valores">
+    <article class="cartao-numero"><span>Missão</span><strong>Cuidar</strong><small>Atender com atenção e explicar cada tratamento.</small></article>
+    <article class="cartao-numero"><span>Visão</span><strong>Confiança</strong><small>Ser a clínica de confiança das famílias do bairro.</small></article>
+    <article class="cartao-numero"><span>Valores</span><strong>Respeito</strong><small>Pontualidade, higiene e respeito ao paciente.</small></article>
+</section>
+
+<section class="painel">
+    <div class="titulo-secao"><div><span class="tag">EQUIPE</span><h2>Nossos dentistas</h2></div></div>
+    <div class="equipe">
+        <article class="pessoa"><span class="avatar">MR</span><div><strong>Dra. Mariana Rocha</strong><small>Clínica geral · CRO-SP 12345</small></div></article>
+        <article class="pessoa"><span class="avatar">PA</span><div><strong>Dr. Paulo Almeida</strong><small>Endodontia (canal) · CRO-SP 23456</small></div></article>
+        <article class="pessoa"><span class="avatar">JS</span><div><strong>Dra. Juliana Santos</strong><small>Estética e clareamento · CRO-SP 34567</small></div></article>
+    </div>
+</section>
+{% endblock %}

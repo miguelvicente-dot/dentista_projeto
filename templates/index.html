@@ -1,61 +1,57 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sorriso Fácil | Clínica Odontológica</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-</head>
-<body>
-    <header class="topo">
-        <div class="marca"><span class="icone">✚</span><div><strong>Sorriso Fácil</strong><small>Clínica Odontológica</small></div></div>
-        <nav><a href="#inicio">Início</a><a href="#pacientes">Pacientes</a><a href="#consultas">Consultas</a></nav>
-    </header>
+{% extends "base.html" %}
+{% from "icones.html" import icone %}
+{% block titulo %}Início{% endblock %}
 
-    <main class="container" id="inicio">
-        <section class="boas-vindas">
-            <div><span class="tag">GESTÃO DA CLÍNICA</span><h1>Cuidar do sorriso<br><em>começa por aqui.</em></h1>
-            <p>Cadastre pacientes e organize as consultas da clínica em um só lugar.</p></div>
-            <div class="desenho" aria-hidden="true">☻</div>
-        </section>
+{% block conteudo %}
+<section class="boas-vindas">
+    <div>
+        <span class="tag">GESTÃO DA CLÍNICA</span>
+        <h1>Cuidar do sorriso<br><em>começa por aqui.</em></h1>
+        <p>Cadastre pacientes e organize as consultas da clínica em um só lugar.</p>
+        <div class="acoes-hero">
+            <a class="botao principal" href="{{ url_for('consultas') }}">Agendar consulta</a>
+            <a class="botao claro" href="{{ url_for('pacientes') }}">Novo paciente</a>
+        </div>
+    </div>
+    <div class="desenho" aria-hidden="true">{{ icone("dente") }}</div>
+</section>
 
-        <section class="resumo">
-            <article class="cartao-numero"><span>Pacientes cadastrados</span><strong id="totalPacientes">0</strong><small>Registros no sistema</small></article>
-            <article class="cartao-numero"><span>Consultas agendadas</span><strong id="totalConsultas">0</strong><small>Consultas registradas</small></article>
-        </section>
+<!-- Os números vêm do banco pelo Python (paginas.py) -->
+<section class="resumo">
+    <article class="cartao-numero"><span>Pacientes cadastrados</span><strong>{{ total_pacientes }}</strong><small>Registros no sistema</small></article>
+    <article class="cartao-numero"><span>Consultas no total</span><strong>{{ total_consultas }}</strong><small>Todas as situações</small></article>
+    <article class="cartao-numero"><span>Agendadas</span><strong>{{ total_agendadas }}</strong><small>Ainda vão acontecer</small></article>
+    <article class="cartao-numero"><span>Concluídas</span><strong>{{ total_concluidas }}</strong><small>Atendimentos feitos</small></article>
+</section>
 
-        <section class="painel" id="pacientes">
-            <div class="titulo-secao"><div><span class="tag">CADASTRO</span><h2>Pacientes</h2><p>Preencha os dados para cadastrar uma pessoa.</p></div></div>
-            <form id="formPaciente" class="formulario">
-                <input type="hidden" id="pacienteId">
-                <label>Nome completo *<input id="nome" required placeholder="Ex.: Ana Silva"></label>
-                <label>Telefone *<input id="telefone" required placeholder="(00) 00000-0000"></label>
-                <label>E-mail<input id="email" type="email" placeholder="email@exemplo.com"></label>
-                <label>CPF<input id="cpf" placeholder="000.000.000-00"></label>
-                <label>Data de nascimento<input id="data_nascimento" type="date"></label>
-                <label>Endereço<input id="endereco" placeholder="Rua, número e bairro"></label>
-                <div class="acoes-form"><button class="botao principal" type="submit" id="botaoSalvar">Cadastrar paciente</button><button class="botao claro" type="button" id="cancelarEdicao">Limpar</button></div>
-            </form>
-            <div class="linha-tabela"><h3>Pacientes cadastrados</h3><input id="buscaPaciente" class="busca" placeholder="Buscar paciente..."></div>
-            <div class="tabela-wrap"><table><thead><tr><th>Nome</th><th>Telefone</th><th>E-mail</th><th>Ações</th></tr></thead><tbody id="listaPacientes"><tr><td colspan="4">Carregando...</td></tr></tbody></table></div>
-        </section>
+<section class="painel">
+    <div class="titulo-secao">
+        <div><span class="tag">AGENDA</span><h2>Próximas consultas</h2><p>As próximas 5 consultas agendadas a partir de hoje.</p></div>
+        <a class="botao claro" href="{{ url_for('consultas') }}">Ver todas</a>
+    </div>
+    <div class="tabela-wrap">
+        <table>
+            <thead><tr><th>Paciente</th><th>Data</th><th>Horário</th><th>Procedimento</th></tr></thead>
+            <tbody>
+            {% for c in proximas %}
+                <tr>
+                    <td><a class="link" href="{{ url_for('ficha_paciente', paciente_id=c.paciente_id) }}"><strong>{{ c.paciente_nome }}</strong></a></td>
+                    <td>{{ c.data|data_br }}</td>
+                    <td>{{ c.horario }}</td>
+                    <td>{{ c.procedimento }}</td>
+                </tr>
+            {% else %}
+                <tr><td colspan="4" class="vazio">Nenhuma consulta agendada.</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
 
-        <section class="painel" id="consultas">
-            <div class="titulo-secao"><div><span class="tag">AGENDA</span><h2>Consultas</h2><p>Agende uma consulta para um paciente cadastrado.</p></div></div>
-            <form id="formConsulta" class="formulario">
-                <label>Paciente *<select id="consultaPaciente" required><option value="">Selecione um paciente</option></select></label>
-                <label>Data *<input id="consultaData" type="date" required></label>
-                <label>Horário *<input id="consultaHorario" type="time" required></label>
-                <label>Procedimento *<select id="procedimento" required><option value="">Selecione</option><option>Limpeza</option><option>Avaliação</option><option>Restauração</option><option>Tratamento de canal</option><option>Extração</option><option>Outro</option></select></label>
-                <label class="campo-largo">Observações<textarea id="observacoes" rows="2" placeholder="Informações adicionais (opcional)"></textarea></label>
-                <div class="acoes-form"><button class="botao principal" type="submit">Agendar consulta</button></div>
-            </form>
-            <div class="linha-tabela"><h3>Consultas marcadas</h3></div>
-            <div class="tabela-wrap"><table><thead><tr><th>Paciente</th><th>Data</th><th>Horário</th><th>Procedimento</th><th>Ação</th></tr></thead><tbody id="listaConsultas"><tr><td colspan="5">Carregando...</td></tr></tbody></table></div>
-        </section>
-        <p class="rodape">Sorriso Fácil · Projeto Integrado DWS + POO + Banco de Dados</p>
-    </main>
-    <div id="aviso" class="aviso" role="status"></div>
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
-</body>
-</html>
+<section class="atalhos">
+    <a class="atalho" href="{{ url_for('pacientes') }}"><span class="ic">{{ icone("usuario") }}</span><strong>Pacientes</strong><small>Cadastrar, editar e buscar</small></a>
+    <a class="atalho" href="{{ url_for('consultas') }}"><span class="ic">{{ icone("calendario") }}</span><strong>Consultas</strong><small>Agendar e mudar a situação</small></a>
+    <a class="atalho" href="{{ url_for('servicos') }}"><span class="ic">{{ icone("dente") }}</span><strong>Serviços</strong><small>Tratamentos oferecidos</small></a>
+    <a class="atalho" href="{{ url_for('contato') }}"><span class="ic">{{ icone("local") }}</span><strong>Contato</strong><small>Endereço e horários</small></a>
+</section>
+{% endblock %}

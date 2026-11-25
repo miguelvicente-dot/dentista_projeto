@@ -2,39 +2,54 @@
 
 Projeto Integrado DWS + POO + Banco de Dados.
 
-## Executar no computador
-1. Instale Python 3.
-2. Abra esta pasta no VS Code.
-3. Execute `pip install -r requirements.txt`.
-4. Execute `python -m backend.app`.
-5. Acesse http://127.0.0.1:5000.
+Sistema web para uma clínica odontológica: cadastro de pacientes, agenda de consultas e páginas de informação da clínica.
 
-No Windows, também pode usar `INICIAR_SITE.bat`.
+## Como rodar no computador
+1. Instale o Python 3.
+2. Abra o CMD dentro desta pasta.
+3. Rode `python -m pip install -r requirements.txt`
+4. Rode `python -m backend.app`
+5. Abra http://127.0.0.1:5000 no navegador.
 
-**Não abra `templates/index.html` diretamente.** Inicie o Flask e acesse pelo endereço acima.
+No Windows também dá para clicar duas vezes em `INICIAR_SITE.bat`.
+
+**Não abra os arquivos de `templates/` direto no navegador.** O site só funciona com o Flask rodando.
 
 ## Publicar no Render
-- Root Directory: vazio.
 - Build Command: `pip install -r requirements.txt`
 - Start Command: `gunicorn backend.app:app`
 
-A pasta `backend` deve estar na raiz do repositório, junto de `requirements.txt`.
-
 ## Pastas
-- `backend/`: Python, Flask, classes, DAOs, rotas e banco.
-- `frontend/css/`: CSS.
-- `frontend/js/`: JavaScript e Fetch.
-- `templates/`: HTML.
-- `database/`: script SQL.
-- `clinica.db`: banco SQLite criado automaticamente.
+```
+backend/            Python (Flask, classes, DAOs, rotas e banco)
+  app.py            cria o Flask e liga tudo
+  models.py         classes Paciente e Consulta (POO)
+  database.py       conexão SQLite, criação das tabelas e dados de exemplo
+  dao.py            PacienteDAO e ConsultaDAO (comandos SQL)
+  paginas.py        rotas que devolvem as páginas HTML
+  routes.py         rotas da API que devolvem JSON
+frontend/
+  css/style.css     visual do site
+  js/comum.js       funções usadas em todas as páginas (Fetch, avisos)
+  js/pacientes.js   tela de pacientes
+  js/consultas.js   tela de consultas
+  img/logo.svg      logo
+templates/          páginas HTML (Jinja)
+database/banco.sql  script SQL das tabelas
+```
 
-## Funcionalidades
-- Cadastrar, listar, editar e excluir pacientes.
-- Pesquisar pacientes pelo nome.
-- Agendar, listar e excluir consultas.
-- Exibir totais de pacientes e consultas.
+## Páginas
+| Endereço | Página |
+|---|---|
+| `/` | Início com resumo e próximas consultas |
+| `/pacientes` | Cadastrar, buscar, editar e excluir pacientes |
+| `/pacientes/<id>` | Ficha do paciente com histórico de consultas |
+| `/consultas` | Agendar, filtrar, mudar situação e excluir consultas |
+| `/servicos` | Tratamentos da clínica |
+| `/sobre` | História, missão e equipe |
+| `/contato` | Endereço, telefones e horários |
 
-## Rotas
+## Rotas da API
 | Método | Rota | Função |
 |---|---|---|
 | GET | `/api/pacientes` | Listar pacientes |
@@ -43,7 +58,9 @@ A pasta `backend` deve estar na raiz do repositório, junto de `requirements.txt
 | DELETE | `/api/pacientes/<id>` | Excluir paciente |
 | GET | `/api/consultas` | Listar consultas |
 | POST | `/api/consultas` | Agendar consulta |
+| PUT | `/api/consultas/<id>/status` | Mudar situação (Agendada, Concluída, Cancelada) |
 | DELETE | `/api/consultas/<id>` | Excluir consulta |
 
-## Explicação para apresentação
-"Meu projeto é um sistema para uma clínica odontológica. O HTML monta a página, o CSS cuida do visual e o JavaScript usa Fetch para conversar com o Python. O Flask recebe as solicitações pelas rotas. Usei as classes Paciente e Consulta para representar os dados, e os DAOs organizam os comandos que acessam o banco SQLite."
+## Banco de dados
+Duas tabelas: `pacientes` e `consultas` (1 paciente tem N consultas, chave estrangeira `paciente_id`).
+O arquivo `clinica.db` é criado sozinho na primeira vez que o site roda, já com 3 pacientes de exemplo.

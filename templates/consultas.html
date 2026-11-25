@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block titulo %}Consultas{% endblock %}
+
+{% block conteudo %}
+<section class="painel">
+    <div class="titulo-secao"><div><span class="tag">AGENDA</span><h2>Consultas</h2><p>Agende uma consulta para um paciente cadastrado.</p></div></div>
+    <form id="formConsulta" class="formulario">
+        <label>Paciente *<select id="consultaPaciente" required><option value="">Selecione um paciente</option></select></label>
+        <label>Data *<input id="consultaData" type="date" required></label>
+        <label>Horário *<input id="consultaHorario" type="time" required></label>
+        <label>Procedimento *
+            <select id="procedimento" required>
+                <option value="">Selecione</option>
+                <option>Limpeza</option><option>Avaliação</option><option>Restauração</option>
+                <option>Tratamento de canal</option><option>Extração</option><option>Clareamento</option><option>Outro</option>
+            </select>
+        </label>
+        <label class="campo-largo">Observações<textarea id="observacoes" rows="2" placeholder="Informações adicionais (opcional)"></textarea></label>
+        <div class="acoes-form"><button class="botao principal" type="submit">Agendar consulta</button></div>
+    </form>
+
+    <div class="linha-tabela">
+        <h3>Consultas marcadas (<span id="totalConsultas">0</span>)</h3>
+        <select id="filtroStatus" class="busca">
+            <option value="">Todas as situações</option>
+            <option>Agendada</option><option>Concluída</option><option>Cancelada</option>
+        </select>
+    </div>
+    <div class="tabela-wrap">
+        <table>
+            <thead><tr><th>Paciente</th><th>Data</th><th>Horário</th><th>Procedimento</th><th>Situação</th><th>Ação</th></tr></thead>
+            <tbody id="listaConsultas"><tr><td colspan="6">Carregando...</td></tr></tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/consultas.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block titulo %}{{ paciente.nome }}{% endblock %}
+
+{% block conteudo %}
+<a class="voltar" href="{{ url_for('pacientes') }}">← Voltar para pacientes</a>
+
+<!-- Página montada pelo Python: os dados vêm do PacienteDAO e do ConsultaDAO -->
+<section class="painel ficha">
+    <div class="titulo-secao">
+        <div><span class="tag">FICHA DO PACIENTE</span><h2>{{ paciente.nome }}</h2><p>Código do paciente: #{{ paciente.id }}</p></div>
+        <a class="botao principal" href="{{ url_for('consultas') }}">Agendar consulta</a>
+    </div>
+    <dl class="dados">
+        <div><dt>Telefone</dt><dd>{{ paciente.telefone }}</dd></div>
+        <div><dt>E-mail</dt><dd>{{ paciente.email or '-' }}</dd></div>
+        <div><dt>CPF</dt><dd>{{ paciente.cpf or '-' }}</dd></div>
+        <div><dt>Nascimento</dt><dd>{{ paciente.data_nascimento|data_br }}</dd></div>
+        <div class="campo-largo"><dt>Endereço</dt><dd>{{ paciente.endereco or '-' }}</dd></div>
+    </dl>
+</section>
+
+<section class="painel">
+    <div class="titulo-secao"><div><span class="tag">HISTÓRICO</span><h2>Consultas do paciente</h2><p>{{ historico|length }} consulta(s) registrada(s).</p></div></div>
+    <div class="tabela-wrap">
+        <table>
+            <thead><tr><th>Data</th><th>Horário</th><th>Procedimento</th><th>Observações</th><th>Situação</th></tr></thead>
+            <tbody>
+            {% for c in historico %}
+                <tr>
+                    <td>{{ c.data|data_br }}</td>
+                    <td>{{ c.horario }}</td>
+                    <td>{{ c.procedimento }}</td>
+                    <td>{{ c.observacoes or '-' }}</td>
+                    <td><span class="status status-{{ c.status|lower }}">{{ c.status }}</span></td>
+                </tr>
+            {% else %}
+                <tr><td colspan="5" class="vazio">Este paciente ainda não tem consultas.</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block titulo %}Sorriso Fácil{% endblock %} | Clínica Odontológica</title>
+    <link rel="icon" href="{{ url_for('static', filename='img/logo.svg') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header class="topo">
+        <a class="marca" href="{{ url_for('inicio') }}">
+            <img class="icone" src="{{ url_for('static', filename='img/logo.svg') }}" alt="">
+            <div><strong>Sorriso Fácil</strong><small>Clínica Odontológica</small></div>
+        </a>
+        <nav>
+            <a href="{{ url_for('inicio') }}" class="{{ 'ativo' if pagina == 'inicio' }}">Início</a>
+            <a href="{{ url_for('pacientes') }}" class="{{ 'ativo' if pagina == 'pacientes' }}">Pacientes</a>
+            <a href="{{ url_for('consultas') }}" class="{{ 'ativo' if pagina == 'consultas' }}">Consultas</a>
+            <a href="{{ url_for('servicos') }}" class="{{ 'ativo' if pagina == 'servicos' }}">Serviços</a>
+            <a href="{{ url_for('sobre') }}" class="{{ 'ativo' if pagina == 'sobre' }}">Sobre</a>
+            <a href="{{ url_for('contato') }}" class="{{ 'ativo' if pagina == 'contato' }}">Contato</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        {% block conteudo %}{% endblock %}
+    </main>
+
+    <footer class="rodape">
+        <p><strong>Sorriso Fácil</strong> · Rua das Acácias, 250 - Centro · (11) 3456-7890</p>
+        <p>Projeto Integrado DWS + POO + Banco de Dados</p>
+    </footer>
+
+    <div id="aviso" class="aviso" role="status"></div>
+    <script src="{{ url_for('static', filename='js/comum.js') }}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

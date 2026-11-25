@@ -25,6 +25,9 @@ class Paciente:
 class Consulta:
     """Representa uma consulta marcada para um paciente."""
 
+    # Situações que uma consulta pode ter
+    STATUS_VALIDOS = ["Agendada", "Concluída", "Cancelada"]
+
     def __init__(self, paciente_id, data, horario, procedimento, observacoes="", status="Agendada", id=None):
         self.id = id
         self.paciente_id = paciente_id

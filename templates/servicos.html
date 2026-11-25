@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% from "icones.html" import icone %}
+{% block titulo %}Serviços{% endblock %}
+
+{% block conteudo %}
+<section class="painel">
+    <div class="titulo-secao"><div><span class="tag">TRATAMENTOS</span><h2>Nossos serviços</h2><p>Os procedimentos que podem ser agendados na clínica.</p></div></div>
+
+    <div class="grade-servicos">
+        <article class="servico">
+            <span class="servico-icone">{{ icone("busca") }}</span>
+            <h3>Avaliação</h3>
+            <p>Consulta inicial para examinar dentes e gengiva e montar o plano de tratamento.</p>
+            <small>Duração: 30 min</small>
+        </article>
+        <article class="servico">
+            <span class="servico-icone">{{ icone("brilho") }}</span>
+            <h3>Limpeza</h3>
+            <p>Remoção de placa bacteriana e tártaro, com polimento e aplicação de flúor.</p>
+            <small>Duração: 40 min</small>
+        </article>
+        <article class="servico">
+            <span class="servico-icone">{{ icone("dente") }}</span>
+            <h3>Restauração</h3>
+            <p>Recupera dentes com cárie ou pequenas fraturas usando resina da cor do dente.</p>
+            <small>Duração: 50 min</small>
+        </article>
+        <article class="servico">
+            <span class="servico-icone">{{ icone("cruz") }}</span>
+            <h3>Tratamento de canal</h3>
+            <p>Trata a parte interna do dente quando a polpa está inflamada ou infeccionada.</p>
+            <small>Duração: 1h a 1h30</small>
+        </article>
+        <article class="servico">
+            <span class="servico-icone">{{ icone("extracao") }}</span>
+            <h3>Extração</h3>
+            <p>Retirada de dentes que não podem ser recuperados, inclusive dentes do siso.</p>
+            <small>Duração: 40 min</small>
+        </article>
+        <article class="servico">
+            <span class="servico-icone">{{ icone("sol") }}</span>
+            <h3>Clareamento</h3>
+            <p>Deixa os dentes mais brancos com acompanhamento do dentista.</p>
+            <small>Duração: 1h</small>
+        </article>
+    </div>
+</section>
+
+<section class="chamada">
+    <div><h2>Precisa de algum desses tratamentos?</h2><p>Cadastre o paciente e marque o horário na agenda.</p></div>
+    <a class="botao principal" href="{{ url_for('consultas') }}">Agendar consulta</a>
+</section>
+{% endblock %}

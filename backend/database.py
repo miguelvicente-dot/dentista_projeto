@@ -1,4 +1,5 @@
 import sqlite3
+from datetime import date, timedelta
 from pathlib import Path
 
 ROOT_DIR = Path(__file__).resolve().parent.parent
@@ -38,3 +39,36 @@ def inicializar_banco():
                     ON DELETE CASCADE
             )
         """)
+    inserir_exemplos()
+
+def inserir_exemplos():
+    """Coloca alguns dados de exemplo quando o banco está vazio
+    (assim o site já abre com informações para mostrar)."""
+    with conectar() as conn:
+        total = conn.execute("SELECT COUNT(*) FROM pacientes").fetchone()[0]
+        if total > 0:
+            return
+
+        pacientes = [
+            ("Ana Souza", "(11) 98765-4321", "ana@email.com", "123.456.789-00", "1995-04-12", "Rua das Flores, 120 - Centro"),
+            ("Bruno Lima", "(11) 91234-5678", "bruno@email.com", "987.654.321-00", "1988-09-30", "Av. Brasil, 455 - Jardim"),
+            ("Carla Mendes", "(11) 99876-1234", "carla@email.com", "456.789.123-00", "2001-01-22", "Rua São João, 78 - Vila Nova"),
+        ]
+        for p in pacientes:
+            conn.execute("""
+                INSERT INTO pacientes (nome, telefone, email, cpf, data_nascimento, endereco)
+                VALUES (?, ?, ?, ?, ?, ?)
+            """, p)
+
+        hoje = date.today()
+        consultas = [
+            (1, hoje - timedelta(days=10), "09:00", "Avaliação", "Primeira consulta", "Concluída"),
+            (1, hoje + timedelta(days=2), "10:30", "Limpeza", "", "Agendada"),
+            (2, hoje + timedelta(days=1), "14:00", "Restauração", "Dente 36", "Agendada"),
+            (3, hoje + timedelta(days=5), "16:00", "Avaliação", "Sensibilidade no dente", "Agendada"),
+        ]
+        for c in consultas:
+            conn.execute("""
+                INSERT INTO consultas (paciente_id, data, horario, procedimento, observacoes, status)
+                VALUES (?, ?, ?, ?, ?, ?)
+            """, (c[0], c[1].isoformat(), c[2], c[3], c[4], c[5]))

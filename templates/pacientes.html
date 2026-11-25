@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block titulo %}Pacientes{% endblock %}
+
+{% block conteudo %}
+<section class="painel">
+    <div class="titulo-secao"><div><span class="tag">CADASTRO</span><h2>Pacientes</h2><p>Preencha os dados para cadastrar uma pessoa. Campos com * são obrigatórios.</p></div></div>
+    <form id="formPaciente" class="formulario">
+        <input type="hidden" id="pacienteId">
+        <label>Nome completo *<input id="nome" required placeholder="Ex.: Ana Silva"></label>
+        <label>Telefone *<input id="telefone" required placeholder="(00) 00000-0000"></label>
+        <label>E-mail<input id="email" type="email" placeholder="email@exemplo.com"></label>
+        <label>CPF<input id="cpf" placeholder="000.000.000-00"></label>
+        <label>Data de nascimento<input id="data_nascimento" type="date"></label>
+        <label>Endereço<input id="endereco" placeholder="Rua, número e bairro"></label>
+        <div class="acoes-form">
+            <button class="botao principal" type="submit" id="botaoSalvar">Cadastrar paciente</button>
+            <button class="botao claro" type="button" id="cancelarEdicao">Limpar</button>
+        </div>
+    </form>
+
+    <div class="linha-tabela"><h3>Pacientes cadastrados (<span id="totalPacientes">0</span>)</h3><input id="buscaPaciente" class="busca" placeholder="Buscar paciente..."></div>
+    <div class="tabela-wrap">
+        <table>
+            <thead><tr><th>Nome</th><th>Telefone</th><th>E-mail</th><th>Ações</th></tr></thead>
+            <tbody id="listaPacientes"><tr><td colspan="4">Carregando...</td></tr></tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/pacientes.js') }}"></script>
+{% endblock %}
